@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - name: runner
-        image: your-registry/github-runner:latest
+        image: ashishkumar256/github-runner:latest 
         envFrom:
         - secretRef:
             name: github-runner-secrets

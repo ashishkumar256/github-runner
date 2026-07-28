@@ -5,6 +5,7 @@ WORKDIR /actions-runner
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     curl jq git tar bash \
+    libicu70 libssl3 libkrb5-3 zlib1g \
     && rm -rf /var/lib/apt/lists/*
 
 # Download runner binary
