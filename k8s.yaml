@@ -6,10 +6,10 @@ type: Opaque
 stringData:
   RUNNER_URL: "https://github.com/ashishkumar256/terrateam-demo"
   RUNNER_TOKEN: "<YOUR_TOKEN>"
-  RUNNER_NAME: "controlplane"
+  RUNNER_NAME: "infra"
   RUNNER_GROUP: "Default"
   RUNNER_LABELS: "infra"
-  RUNNER_WORKDIR: "_work"
+  RUNNER_WORKDIR: "/opt/github-runner/"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -33,7 +33,7 @@ spec:
             name: github-runner-secrets
         volumeMounts:
         - name: runner-work
-          mountPath: /data
+          mountPath: /opt/github-runner/
       volumes:
       - name: runner-work
         emptyDir: {}
