@@ -8,7 +8,7 @@ if [ -z "$RUNNER_URL" ] || [ -z "$RUNNER_TOKEN" ]; then
 fi
 
 # Configure runner unattended
-RUNNER_ALLOW_RUNASROOT=true ./config.sh \
+./config.sh \
   --unattended \
   --url "$RUNNER_URL" \
   --token "$RUNNER_TOKEN" \
@@ -19,4 +19,4 @@ RUNNER_ALLOW_RUNASROOT=true ./config.sh \
   --work "$RUNNER_WORKDIR"
 
 # Start runner
-exec RUNNER_ALLOW_RUNASROOT=true ./run.sh
+./run.sh
