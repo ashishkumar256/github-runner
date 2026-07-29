@@ -44,10 +44,11 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: github-runner-secrets
+  namespace: github
 type: Opaque
 stringData:
   RUNNER_URL: "https://github.com/ashishkumar256/terrateam-demo"
-  RUNNER_TOKEN: "<YOUR_TOKEN>"
+  RUNNER_TOKEN: "YOUR_TOKEN"
   RUNNER_NAME: "infra"
   RUNNER_GROUP: "Default"
   RUNNER_LABELS: "infra"
@@ -57,6 +58,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: github-runner
+  namespace: github
 spec:
   replicas: 1
   selector:
