@@ -18,8 +18,5 @@ fi
   --replace \
   --work "$RUNNER_WORKDIR"
 
-mkdir -p /actions-runner/_work
-chown -R ubuntu:ubuntu /actions-runner
-
 # Start runner
 ./run.sh
