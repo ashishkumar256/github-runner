@@ -52,7 +52,7 @@ stringData:
   RUNNER_NAME: "infra"
   RUNNER_GROUP: "Default"
   RUNNER_LABELS: "infra"
-  RUNNER_WORKDIR: "/opt/github-runner/"
+  RUNNER_WORKDIR: "_work"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -81,14 +81,16 @@ spec:
 
         volumeMounts:
         - name: runner-work
-          mountPath: /opt/github-runner/
+          mountPath: /actions-runner/_work
 
         - name: docker-sock
           mountPath: /var/run/docker.sock
 
       volumes:
       - name: runner-work
-        emptyDir: {}
+        hostPath:
+          path: /actions-runner/_work
+          type: DirectoryOrCreate
 
       - name: docker-sock
         hostPath:
