@@ -70,15 +70,27 @@ spec:
         app: github-runner
     spec:
       serviceAccountName: github-runner
+
       containers:
       - name: runner
-        image: ashishkumar256/github-runner:latest 
+        image: ashishkumar256/github-runner:latest
+
         envFrom:
         - secretRef:
             name: github-runner-secrets
+
         volumeMounts:
         - name: runner-work
           mountPath: /opt/github-runner/
+
+        - name: docker-sock
+          mountPath: /var/run/docker.sock
+
       volumes:
       - name: runner-work
         emptyDir: {}
+
+      - name: docker-sock
+        hostPath:
+          path: /var/run/docker.sock
+          type: Socket

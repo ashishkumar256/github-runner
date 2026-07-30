@@ -8,6 +8,7 @@ RUN groupadd -r ubuntu && useradd -r -g ubuntu ubuntu
 # Install dependencies as root
 RUN apt-get update && apt-get install -y \
     curl jq git tar bash \
+    docker.io \
     libicu70 libssl3 libkrb5-3 zlib1g \
     libc6 libgcc-s1 libstdc++6 \
     && rm -rf /var/lib/apt/lists/*
