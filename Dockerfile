@@ -25,10 +25,9 @@ RUN curl -o actions-runner-linux-x64-${RUNNER_VERSION}.tar.gz -L \
 COPY startup.sh /actions-runner/startup.sh
 RUN chmod +x /actions-runner/startup.sh && chown ubuntu:ubuntu /actions-runner/startup.sh
 
+RUN usermod -aG docker ubuntu
+
 # Switch to non-root user for runtime
 USER ubuntu
-
-RUN groupadd -g 998 docker
-RUN usermod -aG docker ubuntu
 
 ENTRYPOINT ["/actions-runner/startup.sh"]
