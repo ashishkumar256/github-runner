@@ -34,7 +34,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: github-runner
-    namespace: github 
+    namespace: github
 roleRef:
   kind: ClusterRole
   name: github-runner
@@ -86,26 +86,37 @@ spec:
       securityContext:
         fsGroup: 999
       containers:
-      - name: runner
-        image: ashishkumar256/github-runner:1
+        # --- Main runner container ---
+        - name: runner
+          image: ashishkumar256/github-runner:1
+          envFrom:
+            - secretRef:
+                name: github-runner-secrets
+          env:
+            - name: DOCKER_HOST
+              value: "tcp://localhost:2375"
+          volumeMounts:
+            - name: runner-work
+              mountPath: /actions-runner/_work
 
-        envFrom:
-        - secretRef:
-            name: github-runner-secrets
-
-        volumeMounts:
-        - name: runner-work
-          mountPath: /actions-runner/_work
-
-        - name: docker-sock
-          mountPath: /var/run/docker.sock
+        # --- Docker-in-Docker sidecar ---
+        - name: dind
+          image: docker:27-dind
+          securityContext:
+            privileged: true # required for DinD to run its own daemon
+          args:
+            - "--host=tcp://0.0.0.0:2375"  # unauthenticated, only reachable inside the pod's network namespace
+            - "--host=unix:///var/run/docker.sock"
+          volumeMounts:
+            # SAME path as the runner container, so bind-mount paths match
+            - name: runner-work
+              mountPath: /actions-runner/_work
+            - name: docker-storage
+              mountPath: /var/lib/docker
 
       volumes:
-      - name: runner-work
-        persistentVolumeClaim:
-          claimName: runner-work-pvc
-
-      - name: docker-sock
-        hostPath:
-          path: /var/run/docker.sock
-          type: Socket
+        - name: runner-work
+          persistentVolumeClaim:
+            claimName: runner-work-pvc
+        - name: docker-storage
+          emptyDir: {} # Docker's own image/layer storage for the sidecar; ephemeral is fine

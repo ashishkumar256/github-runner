@@ -12,10 +12,6 @@ RUN apt-get update && apt-get install -y \
     libc6 libgcc-s1 libstdc++6 \
     && rm -rf /var/lib/apt/lists/*
 
-ARG DOCKER_GID=112
-RUN groupmod -g ${DOCKER_GID} docker && \
-    usermod -aG docker ubuntu
-
 COPY startup.sh /actions-runner/startup.sh
 RUN chown ubuntu:ubuntu /actions-runner/startup.sh
 
