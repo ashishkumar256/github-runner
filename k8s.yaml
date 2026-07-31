@@ -84,7 +84,7 @@ spec:
     spec:
       serviceAccountName: github-runner
       securityContext:
-        fsGroup: 1000
+        fsGroup: 999
       containers:
       - name: runner
         image: ashishkumar256/github-runner:1
