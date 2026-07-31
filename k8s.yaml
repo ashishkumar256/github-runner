@@ -48,11 +48,24 @@ metadata:
 type: Opaque
 stringData:
   RUNNER_URL: "https://github.com/ashishkumar256/terrateam-demo"
-  RUNNER_TOKEN: "YOUR_TOKEN"
+  RUNNER_TOKEN: "RT"
   RUNNER_NAME: "infra"
   RUNNER_GROUP: "Default"
   RUNNER_LABELS: "infra"
   RUNNER_WORKDIR: "_work"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: runner-work-pvc
+  namespace: github
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path # Uses your default Rancher provisioner
+  resources:
+    requests:
+      storage: 10Gi # Adjust size based on your workflow needs
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -70,10 +83,11 @@ spec:
         app: github-runner
     spec:
       serviceAccountName: github-runner
-
+      securityContext:
+        fsGroup: 1000
       containers:
       - name: runner
-        image: ashishkumar256/github-runner:latest
+        image: ashishkumar256/github-runner:1
 
         envFrom:
         - secretRef:
@@ -88,9 +102,8 @@ spec:
 
       volumes:
       - name: runner-work
-        hostPath:
-          path: /actions-runner/_work
-          type: DirectoryOrCreate
+        persistentVolumeClaim:
+          claimName: runner-work-pvc
 
       - name: docker-sock
         hostPath:

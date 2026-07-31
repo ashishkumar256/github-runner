@@ -24,8 +24,6 @@ USER ubuntu
 
 WORKDIR /actions-runner
 
-COPY startup.sh startup.sh
-
 ARG RUNNER_VERSION=2.336.0
 
 RUN curl -L \
